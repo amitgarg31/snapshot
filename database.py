@@ -1,8 +1,11 @@
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 import os
+from dotenv import load_dotenv
 
-MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
+load_dotenv()
+
+MONGO_URL = os.getenv("MONGO_URL")
 client = MongoClient(MONGO_URL)
 db = client.snapnote
 
