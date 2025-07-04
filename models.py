@@ -6,3 +6,4 @@ class NoteIn(BaseModel):
 
 class NoteOut(BaseModel):
     note_url: str
+
