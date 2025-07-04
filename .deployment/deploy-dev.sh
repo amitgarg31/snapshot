@@ -1,22 +1,11 @@
-name: Deploy Dev
+#!/bin/bash
 
-on:
-  push:
-    branches: [ dev ]
+# Navigate to the dev deployment directory
+cd ~/snapshot-dev
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+# Pull latest code
+git pull origin dev
 
-    steps:
-      - name: Deploy to EC2 (dev)
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd snapshot-dev
-            git pull origin dev
-            docker-compose down
-            docker-compose up --build -d
+# Rebuild and restart the Docker containers
+docker-compose down
+docker-compose up --build -d

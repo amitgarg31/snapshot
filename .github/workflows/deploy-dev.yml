@@ -9,14 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to EC2 (dev)
+      - name: Decode SSH key from base64
+        run: |
+          echo "${{ secrets.EC2_KEY }}" | base64 -d > private_key
+          chmod 600 private_key
+
+      - name: SSH and run deploy script
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
+          key_path: private_key
           script: |
-            cd snapshot-dev
-            git pull origin dev
-            docker-compose down
-            docker-compose up --build -d
+            bash ~/snapshot-dev/.deployment/deploy-dev.sh
